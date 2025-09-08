@@ -155,30 +155,3 @@ class Paiement(models.Model):
     preuve_paiement = models.FileField(upload_to='preuves_paiement/%Y/%m/', null=True, blank=True)
     enregistre_par = models.ForeignKey(CustomUser, on_delete=models.PROTECT)
 
-class ActionRecouvrement(models.Model):
-    TYPE_ACTION_CHOICES = (
-        ('relance', 'Relance'),
-        ('mise_demeure', 'Mise en Demeure'),
-        ('visite', 'Visite de Contrôle'),
-        ('autre', 'Autre Action'),
-    )
-    
-    STATUT_ACTION_CHOICES = (
-        ('planifiee', 'Planifiée'),
-        ('en_cours', 'En Cours'),
-        ('terminee', 'Terminée'),
-        ('annulee', 'Annulée'),
-    )
-    
-    employeur = models.ForeignKey(Employeur, on_delete=models.CASCADE, related_name='actions_recouvrement')
-    type_action = models.CharField(max_length=20, choices=TYPE_ACTION_CHOICES)
-    statut = models.CharField(max_length=20, choices=STATUT_ACTION_CHOICES, default='planifiee')
-    date_planification = models.DateTimeField()
-    date_execution = models.DateTimeField(null=True, blank=True)
-    agent = models.ForeignKey(CustomUser, on_delete=models.PROTECT, related_name='actions_recouvrement')
-    montant_recouvre = models.DecimalField(max_digits=15, decimal_places=2, default=0)
-    observations = models.TextField(blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    
-    
-
