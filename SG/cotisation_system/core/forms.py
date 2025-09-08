@@ -77,27 +77,3 @@ class PaiementForm(forms.ModelForm):
         }
         
         
-class ActionRecouvrementForm(forms.ModelForm):
-    class Meta:
-        model = ActionRecouvrement
-        fields = ['employeur', 'type_action', 'date_planification', 'agent', 'observations']
-        widgets = {
-            'date_planification': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-            'observations': forms.Textarea(attrs={'rows': 3}),
-        }
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # Filtrer les employeurs qui ont des arriérés
-        self.fields['employeur'].queryset = Employeur.objects.filter(
-            declarations__paiements__isnull=True
-        ).distinct()
-
-class ActionRecouvrementUpdateForm(forms.ModelForm):
-    class Meta:
-        model = ActionRecouvrement
-        fields = ['statut', 'date_execution', 'montant_recouvre', 'observations']
-        widgets = {
-            'date_execution': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-            'observations': forms.Textarea(attrs={'rows': 3}),
-        }        
