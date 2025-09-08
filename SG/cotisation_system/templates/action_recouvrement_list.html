@@ -1,0 +1,130 @@
+<!-- templates/core/action_recouvrement_list.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-primary"><i class="bi bi-currency-exchange"></i> Actions de Recouvrement</h2>
+    <div>
+        <a href="{% url 'action_recouvrement_create' %}" class="btn btn-primary rounded-pill me-2">
+            <i class="bi bi-plus-circle"></i> Nouvelle Action
+        </a>
+        <a href="{% url 'employeurs_arrieres' %}" class="btn btn-outline-danger rounded-pill">
+            <i class="bi bi-exclamation-triangle"></i> Employeurs en Arriéré
+        </a>
+    </div>
+</div>
+
+<!-- Filtres -->
+<div class="card shadow-sm rounded-4 mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Statut</label>
+                <select name="statut" class="form-select rounded-pill">
+                    <option value="">Tous les statuts</option>
+                    <option value="planifiee" {% if statut_filter == 'planifiee' %}selected{% endif %}>Planifiée</option>
+                    <option value="en_cours" {% if statut_filter == 'en_cours' %}selected{% endif %}>En Cours</option>
+                    <option value="terminee" {% if statut_filter == 'terminee' %}selected{% endif %}>Terminée</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Type d'action</label>
+                <select name="type" class="form-select rounded-pill">
+                    <option value="">Tous les types</option>
+                    <option value="relance" {% if type_filter == 'relance' %}selected{% endif %}>Relance</option>
+                    <option value="mise_demeure" {% if type_filter == 'mise_demeure' %}selected{% endif %}>Mise en Demeure</option>
+                    <option value="visite" {% if type_filter == 'visite' %}selected{% endif %}>Visite de Contrôle</option>
+                </select>
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+                <div class="w-100">
+                    <button type="submit" class="btn btn-gradient-primary w-100 mb-2 rounded-pill">
+                        <i class="bi bi-filter me-2"></i> Filtrer
+                    </button>
+                    <a href="{% url 'action_recouvrement_list' %}" class="btn btn-outline-secondary w-100 rounded-pill">
+                        <i class="bi bi-arrow-counterclockwise me-2"></i> Réinitialiser
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Tableau des actions -->
+<div class="card shadow-sm rounded-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle">
+                <thead class="table-dark text-uppercase small">
+                    <tr>
+                        <th>Employeur</th>
+                        <th>Type d'action</th>
+                        <th>Statut</th>
+                        <th>Date planification</th>
+                        <th>Agent</th>
+                        <th>Montant recouvré</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for action in actions %}
+                    <tr>
+                        <td>{{ action.employeur.raison_sociale }}</td>
+                        <td>
+                            <span class="badge bg-info text-dark">
+                                {{ action.get_type_action_display }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge 
+                                {% if action.statut == 'planifiee' %}bg-warning
+                                {% elif action.statut == 'en_cours' %}bg-primary
+                                {% elif action.statut == 'terminee' %}bg-success
+                                {% else %}bg-secondary{% endif %}">
+                                {{ action.get_statut_display }}
+                            </span>
+                        </td>
+                        <td>{{ action.date_planification|date:"d/m/Y H:i" }}</td>
+                        <td>{{ action.agent.get_full_name }}</td>
+                        <td class="fw-bold text-success">{{ action.montant_recouvre|default:0 }} FCFA</td>
+                        <td>
+                            <a href="{% url 'action_recouvrement_detail' action.pk %}" class="btn btn-sm btn-info rounded-circle me-1" title="Voir">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a href="{% url 'action_recouvrement_update' action.pk %}" class="btn btn-sm btn-warning rounded-circle" title="Modifier">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted">Aucune action de recouvrement trouvée</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-gradient-primary {
+        background: linear-gradient(135deg, #0d6efd, #6f42c1);
+        border: none;
+        color: #fff;
+        transition: all 0.3s ease;
+    }
+    .btn-gradient-primary:hover {
+        background: linear-gradient(135deg, #6f42c1, #0b5ed7);
+        transform: scale(1.05);
+    }
+    .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        transition: all 0.2s ease-in-out;
+    }
+    .table-hover tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+</style>
+{% endblock %}

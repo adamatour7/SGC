@@ -1,0 +1,107 @@
+<!-- templates/core/assure_form.html -->
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8">
+        <div class="card shadow-lg border-0 rounded-4">
+            <!-- Header stylisé -->
+            <div class="card-header bg-gradient-primary text-white rounded-top-4 d-flex align-items-center">
+                <i class="bi bi-person-plus me-2 fs-3"></i>
+                <h4 class="mb-0">Nouvel Assuré</h4>
+            </div>
+
+            <!-- Corps -->
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+
+                    <div class="mt-4 d-flex justify-content-between">
+                        <button type="submit" class="btn btn-lg btn-primary rounded-pill shadow-sm px-4">
+                            <i class="bi bi-check-circle"></i> Enregistrer
+                        </button>
+                        <a href="{% url 'assure_list' %}" class="btn btn-lg btn-outline-secondary rounded-pill px-4">
+                            <i class="bi bi-x-circle"></i> Liste des Assures
+                        </a>
+                        <a href="{% url 'dashboard' %}" class="btn btn-lg btn-outline-secondary rounded-pill px-4">
+                            <i class="bi bi-x-circle"></i> Annuler
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Dégradé élégant pour le header */
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #17a2b8, #0d6efd);
+    }
+
+    /* Carte avec effet moderne */
+    .card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+    }
+
+    /* Champ focus élégant */
+    .form-control:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.2rem rgba(13,110,253,0.25);
+    }
+
+    /* Boutons avec effet hover */
+    .btn-primary {
+        background: linear-gradient(135deg, #0d6efd, #0b5ed7);
+        border: none;
+        transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #0b5ed7, #084298);
+        transform: scale(1.05);
+    }
+    .btn-outline-secondary:hover {
+        background-color: #f8f9fa;
+        transform: scale(1.05);
+    }
+
+    /* Animation du champ employeur */
+    .fade {
+        opacity: 0;
+        transition: opacity 0.4s ease, height 0.4s ease;
+        overflow: hidden;
+        height: 0;
+    }
+    .fade.show {
+        opacity: 1;
+        height: auto;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const typeAssureSelect = document.getElementById('id_type_assure');
+    const employeurWrapper = document.getElementById('id_employeur').closest('.form-group');
+
+    // Ajouter une classe fade pour animation
+    employeurWrapper.classList.add('fade');
+
+    function toggleEmployeurField() {
+        if (typeAssureSelect.value === 'salarie') {
+            employeurWrapper.classList.add('show');
+        } else {
+            employeurWrapper.classList.remove('show');
+        }
+    }
+
+    typeAssureSelect.addEventListener('change', toggleEmployeurField);
+    toggleEmployeurField(); // Initial state
+});
+</script>
+{% endblock %}

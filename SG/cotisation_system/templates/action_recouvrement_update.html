@@ -1,0 +1,30 @@
+<!-- templates/core/action_recouvrement_update.html -->
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-warning">
+                <h4><i class="bi bi-pencil"></i> Modifier l'Action de Recouvrement</h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <strong>Employeur:</strong> {{ action.employeur.raison_sociale }}<br>
+                    <strong>Type d'action:</strong> {{ action.get_type_action_display }}
+                </div>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'action_recouvrement_detail' action.pk %}" class="btn btn-secondary">Annuler</a>
+                        <button type="submit" class="btn btn-primary">Mettre à jour</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,155 @@
+<!-- templates/core/dashboard.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12 text-center">
+        <h2 class="fw-bold"><i class="bi bi-speedometer2"></i> Tableau de Bord</h2>
+        <p class="text-muted">Vue d'ensemble du système de gestion des cotisations</p>
+    </div>
+</div>
+
+<!-- Actions rapides -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-lightning-charge"></i> Actions Rapides</h5>
+            </div>
+            <div class="card-body text-center">
+                <div class="dropdown d-inline-block">
+                    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="actionsRapidesDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-gear"></i> Actions Rapides
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="actionsRapidesDropdown">
+                        <li><a class="dropdown-item" href="{% url 'employeur_create' %}"><i class="bi bi-building-add"></i> Nouvel Employeur</a></li>
+                        <li><a class="dropdown-item" href="{% url 'assure_create' %}"><i class="bi bi-person-plus"></i> Nouvel Assuré</a></li>
+                        <li><a class="dropdown-item" href="{% url 'declaration_create' %}"><i class="bi bi-file-earmark-text"></i> Nouvelle Déclaration</a></li>
+                        <li><a class="dropdown-item" href="{% url 'paiement_create' %}"><i class="bi bi-cash"></i> Nouveau Paiement</a></li>
+                        <li><a class="dropdown-item" href="{% url 'action_recouvrement_list' %}"><i class="bi bi-clipboard-check"></i> Suivi Recouvrement</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- KPI Cards -->
+<div class="row mb-4 g-4">
+    {% comment %} Tes cartes KPI existantes {% endcomment %}
+    <div class="col-md-3">
+        <div class="card kpi-card shadow-sm border-0 bg-primary text-white h-100">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-uppercase fw-light">Nouveaux Employeurs</h6>
+                    <h3 class="fw-bold">{{ nouveaux_employeurs }}</h3>
+                </div>
+                <i class="bi bi-buildings fs-1 opacity-75"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card kpi-card shadow-sm border-0 bg-success text-white h-100">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-uppercase fw-light">Nouveaux Assurés</h6>
+                    <h3 class="fw-bold">{{ nouveaux_assures }}</h3>
+                </div>
+                <i class="bi bi-people fs-1 opacity-75"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card kpi-card shadow-sm border-0 bg-info text-white h-100">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-uppercase fw-light">Taux de Conformité</h6>
+                    <h3 class="fw-bold">{{ taux_conformite }}%</h3>
+                </div>
+                <i class="bi bi-check-circle fs-1 opacity-75"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card kpi-card shadow-sm border-0 bg-warning text-white h-100">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-uppercase fw-light">Cotisations Collectées</h6>
+                    <h4 class="fw-bold">{{ cotisations_encaissees|floatformat:2 }} FCFA</h4>
+                </div>
+                <i class="bi bi-cash-coin fs-1 opacity-75"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Derniers Employeurs et Paiements -->
+<div class="row g-4">
+    <!-- Derniers Employeurs -->
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-buildings"></i> Derniers Employeurs</h5>
+                <button class="btn btn-sm btn-outline-light" type="button" data-bs-toggle="collapse" data-bs-target="#derniersEmployeursBody" aria-expanded="true">
+                    <i class="bi bi-chevron-down"></i>
+                </button>
+            </div>
+            <div id="derniersEmployeursBody" class="collapse show">
+                <ul class="list-group list-group-flush">
+                    {% for employeur in derniers_employeurs %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>{{ employeur.raison_sociale }}</strong><br>
+                            <small class="text-muted">N° {{ employeur.numero_immatriculation }}</small>
+                        </div>
+                        <span class="badge bg-success">{{ employeur.get_statut_display }}</span>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item text-center text-muted py-3">Aucun employeur récent</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Derniers Paiements -->
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-cash"></i> Derniers Paiements</h5>
+                <button class="btn btn-sm btn-outline-light" type="button" data-bs-toggle="collapse" data-bs-target="#derniersPaiementsBody" aria-expanded="true">
+                    <i class="bi bi-chevron-down"></i>
+                </button>
+            </div>
+            <div id="derniersPaiementsBody" class="collapse show">
+                <ul class="list-group list-group-flush">
+                    {% for paiement in derniers_paiements %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>{{ paiement.declaration.employeur.raison_sociale }}</strong><br>
+                            <small class="text-muted">{{ paiement.montant|floatformat:2 }} FCFA - {{ paiement.get_mode_paiement_display }}</small>
+                        </div>
+                        <span class="badge bg-primary">{{ paiement.date_paiement|date:"d/m/Y" }}</span>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item text-center text-muted py-3">Aucun paiement récent</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .kpi-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .kpi-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    .card-header button {
+        border: none;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,70 @@
+<!-- templates/core/login.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center vh-100" style="background: linear-gradient(to right, #e0f7fa, #ffffff);">
+    <div class="col-md-6 col-lg-4">
+        <div class="card shadow-lg rounded-4">
+            <!-- Header -->
+            <div class="card-header bg-gradient-primary text-white text-center rounded-top-4">
+                <h4 class="mb-0"><i class="bi bi-shield-lock me-2"></i> Connexion</h4>
+            </div>
+
+            <!-- Body -->
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Nom d'utilisateur</label>
+                        <input type="text" name="username" class="form-control form-control-lg" placeholder="Entrez votre nom d'utilisateur" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Mot de passe</label>
+                        <input type="password" name="password" class="form-control form-control-lg" placeholder="Entrez votre mot de passe" required>
+                    </div>
+                    <button type="submit" class="btn btn-lg btn-gradient-primary w-100 rounded-pill shadow-sm">
+                        <i class="bi bi-box-arrow-in-right me-2"></i> Se connecter
+                    </button>
+                </form>
+
+                <hr class="my-4">
+
+                <div class="text-center text-muted">
+                    <small>Compte de test: <strong>admin / admin123</strong></small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Dégradé header */
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #0d6efd, #6f42c1);
+    }
+
+    /* Input focus */
+    .form-control:focus {
+        border-color: #6f42c1;
+        box-shadow: 0 0 0 0.2rem rgba(111,66,193,0.25);
+    }
+
+    /* Button gradient */
+    .btn-gradient-primary {
+        background: linear-gradient(135deg, #0d6efd, #6f42c1);
+        border: none;
+        transition: all 0.3s ease;
+    }
+    .btn-gradient-primary:hover {
+        background: linear-gradient(135deg, #6f42c1, #0b5ed7);
+        transform: scale(1.03);
+    }
+
+    /* Card hover */
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+        transition: all 0.3s ease;
+    }
+</style>
+{% endblock %}

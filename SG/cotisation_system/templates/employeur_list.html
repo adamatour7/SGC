@@ -1,0 +1,102 @@
+<!-- templates/core/employeur_list.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-primary">
+        <i class="bi bi-buildings"></i> Liste des Employeurs
+    </h2>
+    <a href="{% url 'employeur_create' %}" class="btn btn-lg btn-primary rounded-pill shadow-sm px-4">
+        <i class="bi bi-plus-circle"></i> Nouvel Employeur
+    </a>
+</div>
+
+<div class="card shadow-lg border-0 rounded-4">
+    <div class="card-header bg-gradient-primary text-white rounded-top-4">
+        <h5 class="mb-0"><i class="bi bi-list-check"></i> Gestion des employeurs</h5>
+    </div>
+    <div class="card-body p-4">
+        <div class="table-responsive">
+            <table class="table align-middle table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>N° Immatriculation</th>
+                        <th>Raison Sociale</th>
+                        <th>NIF / RCCM</th>
+                        <th>Secteur</th>
+                        <th>Statut</th>
+                        <th>Date Création</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for employeur in employeurs %}
+                    <tr class="table-row">
+                        <td class="fw-semibold">{{ employeur.numero_immatriculation|default:"—" }}</td>
+                        <td>{{ employeur.raison_sociale }}</td>
+                        <td>
+                            <small class="d-block text-muted">NIF : {{ employeur.nif }}</small>
+                            <small class="d-block text-muted">RCCM : {{ employeur.rccm }}</small>
+                        </td>
+                        <td>{{ employeur.secteur_activite }}</td>
+                        <td>
+                            <span class="badge rounded-pill bg-{% if employeur.statut == 'valide' %}success{% elif employeur.statut == 'rejete' %}danger{% else %}warning text-dark{% endif %}">
+                                {{ employeur.get_statut_display }}
+                            </span>
+                        </td>
+                        <td>{{ employeur.date_creation|date:"d/m/Y" }}</td>
+                        <td class="text-center">
+                            <a href="{% url 'employeur_detail' employeur.pk %}" class="btn btn-sm btn-outline-info rounded-circle me-1" title="Voir">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a href="{% url 'employeur_update' employeur.pk %}" class="btn btn-sm btn-outline-warning rounded-circle" title="Modifier">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                        </td>
+                        
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-4">Aucun employeur enregistré</td>
+                    </tr>
+                    {% endfor %}
+                    
+                </tbody>
+            </table>
+             <a href="{% url 'dashboard' %}" class="btn btn-lg btn-outline-secondary rounded-pill px-4">
+                            <i class="bi bi-x-circle"></i> Annuler
+             </a>
+    </div>
+        </div>
+</div>
+<style>
+    /* Dégradé header */
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #0069d9, #004085);
+    }
+
+    /* Hover sur les lignes du tableau */
+    .table-row {
+        transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+    .table-row:hover {
+        background-color: #f1f5ff;
+        transform: scale(1.01);
+    }
+
+    /* Ombres douces pour boutons */
+    .btn {
+        transition: all 0.3s ease;
+    }
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+    /* Badges plus élégants */
+    .badge {
+        font-size: 0.85rem;
+        padding: 0.5em 0.8em;
+    }
+</style>
+{% endblock %}

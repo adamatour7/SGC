@@ -1,0 +1,93 @@
+<!-- templates/core/action_recouvrement_detail.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h4><i class="bi bi-currency-exchange"></i> Détails de l'Action de Recouvrement</h4>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong>Employeur:</strong> {{ action.employeur.raison_sociale }}
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Type d'action:</strong>
+                        <span class="badge bg-info">{{ action.get_type_action_display }}</span>
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong>Statut:</strong>
+                        <span class="badge 
+                            {% if action.statut == 'planifiee' %}bg-warning
+                            {% elif action.statut == 'en_cours' %}bg-primary
+                            {% elif action.statut == 'terminee' %}bg-success
+                            {% else %}bg-secondary{% endif %}">
+                            {{ action.get_statut_display }}
+                        </span>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Agent:</strong> {{ action.agent.get_full_name }}
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong>Date planification:</strong> {{ action.date_planification|date:"d/m/Y H:i" }}
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Date exécution:</strong> 
+                        {% if action.date_execution %}
+                            {{ action.date_execution|date:"d/m/Y H:i" }}
+                        {% else %}
+                            <span class="text-muted">Non exécutée</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong>Montant recouvré:</strong>
+                        <span class="fw-bold text-success">{{ action.montant_recouvre|default:0 }} FCFA</span>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Créée le:</strong> {{ action.created_at|date:"d/m/Y H:i" }}
+                    </div>
+                </div>
+                
+                {% if action.observations %}
+                <div class="mb-3">
+                    <strong>Observations:</strong>
+                    <p class="border p-3 rounded">{{ action.observations }}</p>
+                </div>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'action_recouvrement_update' action.pk %}" class="btn btn-warning">
+                    <i class="bi bi-pencil"></i> Modifier
+                </a>
+                <a href="{% url 'action_recouvrement_list' %}" class="btn btn-secondary">Retour à la liste</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-warning">
+                <h5>Informations Employeur</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>NIF:</strong> {{ action.employeur.nif }}</p>
+                <p><strong>RCCM:</strong> {{ action.employeur.rccm }}</p>
+                <p><strong>Secteur:</strong> {{ action.employeur.secteur_activite }}</p>
+                <p><strong>Contact:</strong> {{ action.employeur.contact_telephone }}</p>
+                <p><strong>Email:</strong> {{ action.employeur.contact_email }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,74 @@
+<!-- templates/core/declaration_form.html -->
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8">
+        <div class="card shadow-lg border-0 rounded-4">
+            <!-- Header avec dégradé -->
+            <div class="card-header bg-gradient-primary text-white rounded-top-4 d-flex align-items-center">
+                <i class="bi bi-file-earmark-text me-2 fs-3"></i>
+                <h4 class="mb-0">Nouvelle Déclaration</h4>
+            </div>
+
+            <!-- Corps -->
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+
+                    <div class="mt-4 d-flex justify-content-between">
+                        <button type="submit" class="btn btn-lg btn-primary rounded-pill shadow-sm px-4">
+                            <i class="bi bi-check-circle"></i> Enregistrer
+                        </button>
+                        <a href="{% url 'declaration_list' %}" class="btn btn-lg btn-outline-secondary rounded-pill px-4">
+                            <i class="bi bi-x-circle"></i> Liste des Declarations
+                        </a>
+                        <a href="{% url 'dashboard' %}" class="btn btn-lg btn-outline-secondary rounded-pill px-4">
+                            <i class="bi bi-x-circle"></i> Annuler
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Dégradé élégant pour l'entête */
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #6f42c1, #0d6efd);
+    }
+
+    /* Carte moderne avec hover */
+    .card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+    }
+
+    /* Champs du formulaire avec focus stylisé */
+    .form-control:focus {
+        border-color: #6f42c1;
+        box-shadow: 0 0 0 0.2rem rgba(111,66,193,0.25);
+    }
+
+    /* Boutons élégants */
+    .btn-primary {
+        background: linear-gradient(135deg, #0d6efd, #0b5ed7);
+        border: none;
+        transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #0b5ed7, #084298);
+        transform: scale(1.05);
+    }
+    .btn-outline-secondary:hover {
+        background-color: #f8f9fa;
+        transform: scale(1.05);
+    }
+</style>
+{% endblock %}

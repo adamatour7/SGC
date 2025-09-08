@@ -1,0 +1,114 @@
+<!-- templates/core/employeur_detail.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8">
+        <div class="card shadow-lg border-0 rounded-4">
+            <!-- Header -->
+            <div class="card-header bg-gradient-info text-white rounded-top-4 d-flex align-items-center">
+                <i class="bi bi-building me-2 fs-3"></i>
+                <h4 class="mb-0">Détails de l'Employeur</h4>
+            </div>
+
+            <!-- Corps -->
+            <div class="card-body p-4">
+                <div class="row mb-3">
+                    <div class="col-md-6"><strong>Numéro d'immatriculation:</strong> {{ employeur.numero_immatriculation }}</div>
+                    <div class="col-md-6">
+                        <strong>Statut:</strong> 
+                        <span class="badge rounded-pill bg-{% if employeur.statut == 'valide' %}success{% elif employeur.statut == 'rejete' %}danger{% else %}warning text-dark{% endif %}">
+                            {{ employeur.get_statut_display }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6"><strong>Raison sociale:</strong> {{ employeur.raison_sociale }}</div>
+                    <div class="col-md-6"><strong>NIF:</strong> {{ employeur.nif }}</div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6"><strong>RCCM:</strong> {{ employeur.rccm }}</div>
+                    <div class="col-md-6"><strong>Secteur d'activité:</strong> {{ employeur.secteur_activite }}</div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-12"><strong>Adresse:</strong> {{ employeur.adresse }}</div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6"><strong>Contact:</strong> {{ employeur.contact_nom }}</div>
+                    <div class="col-md-6"><strong>Téléphone:</strong> {{ employeur.contact_telephone }}</div>
+                </div>
+
+                {% if pieces %}
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <strong>Pièces justificatives:</strong>
+                        <ul class="list-group mt-2">
+                            {% for piece in pieces %}
+                            <li class="list-group-item d-flex align-items-center">
+                                <i class="bi bi-file-earmark me-2 text-primary"></i>
+                                <a href="{{ piece.fichier.url }}" target="_blank" class="text-decoration-none">
+                                    {{ piece.nom }}
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="mt-4 d-flex gap-2">
+                    <a href="{% url 'employeur_update' employeur.pk %}" class="btn btn-warning rounded-pill shadow-sm px-4">
+                        <i class="bi bi-pencil"></i> Modifier
+                    </a>
+                    <a href="{% url 'employeur_list' %}" class="btn btn-secondary rounded-pill shadow-sm px-4">
+                        <i class="bi bi-arrow-left"></i> Retour à la liste
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Dégradé header */
+    .bg-gradient-info {
+        background: linear-gradient(135deg, #0dcaf0, #0d6efd);
+    }
+
+    /* Carte moderne */
+    .card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+    }
+
+    /* Badges */
+    .badge {
+        font-size: 0.85rem;
+        padding: 0.5em 0.8em;
+    }
+
+    /* Pièces justificatives */
+    .list-group-item {
+        transition: background-color 0.2s ease;
+    }
+    .list-group-item:hover {
+        background-color: #f8f9fa;
+    }
+
+    /* Boutons */
+    .btn {
+        transition: all 0.3s ease;
+    }
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+</style>
+{% endblock %}

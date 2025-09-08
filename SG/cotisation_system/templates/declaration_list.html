@@ -1,0 +1,90 @@
+<!-- templates/core/declaration_list.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-primary">
+        <i class="bi bi-file-text"></i> Liste des Déclarations
+    </h2>
+    <a href="{% url 'declaration_create' %}" class="btn btn-lg btn-gradient-primary shadow-sm rounded-pill">
+        <i class="bi bi-plus-circle"></i> Nouvelle Déclaration
+    </a>
+</div>
+
+<div class="card shadow-lg border-0 rounded-4">
+    <!-- En-tête -->
+    <div class="card-header bg-gradient-primary text-white rounded-top-4">
+        <h5 class="mb-0"><i class="bi bi-list-task"></i> Déclarations enregistrées</h5>
+    </div>
+
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table align-middle table-hover">
+                <thead class="table-light">
+                    <tr class="text-uppercase text-muted small">
+                        <th>Référence</th>
+                        <th>Employeur</th>
+                        <th>Période</th>
+                        <th>Montant Total</th>
+                        <th>Statut</th>
+                        <th>Date Soumission</th>
+                        <!-- <th>Créé par</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for declaration in declarations %}
+                    <tr>
+                        <td><span class="fw-bold text-primary">DEC{{ declaration.id|stringformat:"06d" }}</span></td>
+                        <td>{{ declaration.employeur.raison_sociale }}</td>
+                        <td><span class="badge bg-info text-dark">{{ declaration.periode|date:"m/Y" }}</span></td>
+                        <td class="fw-semibold">{{ declaration.montant_total_cotisations|floatformat:2 }} <small>FCFA</small></td>
+                        <td>
+                            <span class="badge bg-{% if declaration.statut == 'valide' %}success{% elif declaration.statut == 'rejete' %}danger{% else %}warning text-dark{% endif %}">
+                                {{ declaration.get_statut_display }}
+                            </span>
+                        </td>
+                        <td>{{ declaration.date_soumission|date:"d/m/Y H:i"|default:"-" }}</td>
+                        <td>{{ declaration.created_by.get_full_name }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-4">
+                            <i class="bi bi-inbox fs-3"></i><br>
+                            Aucune déclaration enregistrée
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <a href="{% url 'dashboard' %}" class="btn btn-lg btn-outline-secondary rounded-pill px-4">
+                            <i class="bi bi-x-circle"></i> Annuler
+        </a>
+    </div>
+</div>
+
+<style>
+    /* Dégradé élégant */
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #6f42c1, #0d6efd);
+    }
+
+    /* Bouton d'action rapide */
+    .btn-gradient-primary {
+        background: linear-gradient(135deg, #0d6efd, #0b5ed7);
+        border: none;
+        transition: all 0.3s ease;
+    }
+    .btn-gradient-primary:hover {
+        background: linear-gradient(135deg, #0b5ed7, #084298);
+        transform: scale(1.05);
+    }
+
+    /* Table */
+    .table-hover tbody tr:hover {
+        background-color: #f8f9fa;
+        transform: scale(1.01);
+        transition: all 0.2s ease-in-out;
+    }
+</style>
+{% endblock %}

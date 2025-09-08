@@ -1,0 +1,76 @@
+<!-- templates/core/employeur_form.html -->
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8">
+        <div class="card shadow-lg border-0 rounded-4">
+            <!-- Header stylisé -->
+            <div class="card-header text-white bg-gradient-primary rounded-top-4 d-flex align-items-center">
+                <i class="bi bi-building me-2 fs-3"></i>
+                <h4 class="mb-0">
+                    {% if edition %}Modifier{% else %}Nouvel{% endif %} Employeur
+                </h4>
+            </div>
+
+            <!-- Corps -->
+            <div class="card-body p-4">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+
+                    <div class="mt-4 d-flex justify-content-between">
+                        <button type="submit" class="btn btn-lg btn-primary rounded-pill shadow-sm px-4">
+                            <i class="bi bi-check-circle"></i> Enregistrer
+                        </button>
+                        <a href="{% url 'employeur_list' %}" class="btn btn-lg btn-outline-secondary rounded-pill px-4">
+                            <i class="bi bi-x-circle"></i> Liste des Employeur
+                        </a>
+                        <a href="{% url 'dashboard' %}" class="btn btn-lg btn-outline-secondary rounded-pill px-4">
+                            <i class="bi bi-x-circle"></i> Annuler
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Dégradé élégant pour l'entête */
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #0069d9, #0056b3);
+    }
+
+    /* Adoucir la carte */
+    .card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+    }
+
+    /* Input focus élégant */
+    .form-control:focus {
+        border-color: #0069d9;
+        box-shadow: 0 0 0 0.2rem rgba(0,105,217,0.25);
+    }
+
+    /* Boutons */
+    .btn-primary {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        border: none;
+        transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #0056b3, #004085);
+        transform: scale(1.05);
+    }
+    .btn-outline-secondary:hover {
+        background-color: #f8f9fa;
+        transform: scale(1.05);
+    }
+</style>
+{% endblock %}
