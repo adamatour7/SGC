@@ -41,15 +41,4 @@ urlpatterns = [
     # API pour les données
     path('api/kpi-data/', views.kpi_data, name='kpi_data'),
     
-    # Actions de recouvrement
-    path('actions-recouvrement/', views.action_recouvrement_list, name='action_recouvrement_list'),
-    path('actions-recouvrement/nouvelle/', views.action_recouvrement_create, name='action_recouvrement_create'),
-    path('actions-recouvrement/<int:pk>/', views.action_recouvrement_detail, name='action_recouvrement_detail'),
-    path('actions-recouvrement/<int:pk>/modifier/', views.action_recouvrement_update, name='action_recouvrement_update'),
-    path('actions-recouvrement/<int:pk>/supprimer/', views.action_recouvrement_delete, name='action_recouvrement_delete'),
-    
-    # Employeurs en arriéré
-    path('employeurs-arrieres/', views.employeurs_arrieres, name='employeurs_arrieres'),
-    
-
-]
+ 
